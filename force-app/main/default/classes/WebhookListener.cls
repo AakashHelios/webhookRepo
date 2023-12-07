@@ -1,23 +1,55 @@
+// @RestResource(urlMapping='/webhookListener/*')
+// global  with sharing class WebhookListener {
+
+//     @HttpPost
+//     global static void handlenotification(){
+//         try{
+//             RestRequest request=RestContext.request;
+//             RestResponse response= RestContext.response;
+//             System.debug('response'+response);
+
+//             //fetch the body
+
+//             //String hashedval=request.headers.get()
+//             Blob bb=request.requestBody;
+//             System.debug('bb'+ bb);
+          
+//         } catch(Exception e){
+//             System.debug('execption happen'+e.getMessage());
+
+//         }
+//     }
+    
+// }
+
 @RestResource(urlMapping='/webhookListener/*')
-global  with sharing class WebhookListener {
+global with sharing class WebhookListener {
 
     @HttpPost
     global static void handlenotification(){
         try{
-            RestRequest request=RestContext.request;
-            RestResponse response= RestContext.response;
-            System.debug('response'+response);
+            RestRequest request = RestContext.request;
+            RestResponse response = RestContext.response;
+            System.debug('Received request: ' + request);
 
-            //fetch the body
+            // Fetch the body
+            Blob requestBodyBlob = request.requestBody;
+            String requestBodyString = requestBodyBlob.toString();
+            System.debug('Received JSON in request body: ' + requestBodyString);
 
-            //String hashedval=request.headers.get()
-            Blob bb=request.requestBody;
-            System.debug('bb'+ bb);
-          
+            // Parse the JSON
+            if (!String.isEmpty(requestBodyString)) {
+                JSONParser parser = JSON.createParser(requestBodyString);
+                while (parser.nextToken() != null) {
+                    // Process JSON tokens here
+                    System.debug(parser.getText());
+                }
+            } else {
+                System.debug('Empty request body');
+            }
         } catch(Exception e){
-            System.debug('execption happen'+e.getMessage());
-
+            System.debug('Exception occurred: ' + e.getMessage());
         }
     }
-    
 }
+
