@@ -13,8 +13,7 @@ global  with sharing class WebhookListener {
             //String hashedval=request.headers.get()
             Blob bb=request.requestBody;
             System.debug('bb'+ bb);
-            JSONParser jp=JSON.createParser(request.requestBody.toString());
-			System.debug('JSON jp'+jp);
+          
         } catch(Exception e){
             System.debug('execption happen'+e.getMessage());
 
